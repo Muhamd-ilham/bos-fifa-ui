@@ -1,0 +1,4 @@
+node_modules
+.env
+elite_database.csv
+dataset.csv
