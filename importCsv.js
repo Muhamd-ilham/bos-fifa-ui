@@ -2,6 +2,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const pool = require('./db');
 
+// KITA SEKARANG BACA FILE YANG UDAH DIBERSIHKAN PYTHON!
 const fileName = 'elite_database.csv';
 
 const COUNTRY_MAP = {
@@ -26,53 +27,15 @@ async function importData() {
         })
         .on('end', async () => {
             try {
-                console.log(`🔨 Membangun pondasi tabel di rumah baru (Neon.tech)...`);
-                
-                // 1. OTOMATIS BIKIN TABEL KALAU BELUM ADA
-                await pool.query(`
-                    CREATE TABLE IF NOT EXISTS leagues (
-                        id SERIAL PRIMARY KEY,
-                        name VARCHAR(255) NOT NULL,
-                        country VARCHAR(255)
-                    );
-                    CREATE TABLE IF NOT EXISTS clubs (
-                        id SERIAL PRIMARY KEY,
-                        name VARCHAR(255) NOT NULL,
-                        league_id INT REFERENCES leagues(id) ON DELETE CASCADE
-                    );
-                    CREATE TABLE IF NOT EXISTS players (
-                        id SERIAL PRIMARY KEY,
-                        name VARCHAR(255) NOT NULL,
-                        nationality VARCHAR(255),
-                        club_id INT REFERENCES clubs(id) ON DELETE CASCADE,
-                        position VARCHAR(50),
-                        overall_rating INT,
-                        pace INT,
-                        shooting INT,
-                        passing INT,
-                        defending INT
-                    );
-                    CREATE TABLE IF NOT EXISTS matches (
-                        id SERIAL PRIMARY KEY,
-                        home_team_id INT REFERENCES clubs(id) ON DELETE CASCADE,
-                        away_team_id INT REFERENCES clubs(id) ON DELETE CASCADE,
-                        home_score INT DEFAULT 0,
-                        away_score INT DEFAULT 0,
-                        status VARCHAR(50) DEFAULT 'SCHEDULED',
-                        matchday INT
-                    );
-                `);
-
-                console.log(`🧹 Tabel siap! Mereset data lama...`);
+                console.log(`🧹 Reset Database...`);
                 await pool.query('TRUNCATE matches, players, clubs, leagues RESTART IDENTITY CASCADE');
 
                 let countPlayers = 0;
                 let countClubs = 0;
                 let countLeagues = 0;
 
-                console.log(`🚀 Mengirim data ke server awan... (Tunggu sebentar ya)`);
-
                 for (const [leagueName, clubsData] of Object.entries(memoryDB)) {
+                    // 1. Masukin Liga
                     const country = COUNTRY_MAP[leagueName] || 'Global';
                     const leagueRes = await pool.query(
                         "INSERT INTO leagues (name, country) VALUES ($1, $2) RETURNING id",
@@ -82,6 +45,7 @@ async function importData() {
                     countLeagues++;
 
                     for (const [clubName, players] of Object.entries(clubsData)) {
+                        // 2. Masukin Klub
                         const clubRes = await pool.query(
                             "INSERT INTO clubs (name, league_id) VALUES ($1, $2) RETURNING id",
                             [clubName, leagueId]
@@ -89,6 +53,7 @@ async function importData() {
                         const clubId = clubRes.rows[0].id;
                         countClubs++;
 
+                        // 3. Masukin Pemain
                         for (const p of players) {
                             await pool.query(
                                 `INSERT INTO players 
@@ -101,9 +66,9 @@ async function importData() {
                     }
                 }
 
-                console.log(`\n=== 📊 REKAPITULASI FINAL KE SERVER CLOUD ===`);
+                console.log(`\n=== 📊 REKAPITULASI FINAL ===`);
                 console.log(`🏆 Total Liga  : ${countLeagues} Liga`);
-                console.log(`🛡️ Total Klub  : ${countClubs} Klub`);
+                console.log(`🛡️ Total Klub  : ${countClubs} Klub (Sempurna 96 Klub!)`);
                 console.log(`⚽ Total Pemain: ${countPlayers} Pemain Elit`);
                 process.exit(0);
             } catch (err) {

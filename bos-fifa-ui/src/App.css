@@ -1,122 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg-paper: #07110C;
+  --bg-card: #0C1A12;
+  --bg-soft: #11211A;
+  --bg-input: #152A21;
+  --ink-dark: #ECEFE8;
+  --ink-medium: #9CB0A4;
+  --ink-light: #5F7468;
+  --line-delicate: #1B2C22;
+  --accent-success: #34D399;
+  --accent-danger: #F87171;
+  --accent-gold: #E5C26A;
+  --row-gold-bg: rgba(229,194,106,0.10);
+  --shadow-float: 0 0 0 1px rgba(229,194,106,0.07), 0 8px 24px rgba(0,0,0,0.18);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
-  background-color: #0f172a;
-  color: #f8fafc;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  margin: 0;
-  padding: 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg-paper);
+  color: var(--ink-dark);
+  -webkit-font-smoothing: antialiased;
 }
 
-.dashboard-container {
-  max-width: 1000px;
-  margin: 0 auto;
+/* =========================================
+   LAYOUT UTAMA (SIDEBAR + KONTEN)
+========================================= */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 
-header h1 { color: #38bdf8; margin-bottom: 5px; }
-header p { color: #94a3b8; margin-top: 0; margin-bottom: 30px; }
-
-.card {
-  background-color: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-}
-
-.player-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.player-table th, .player-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #334155;
-}
-
-.player-table th { color: #94a3b8; text-transform: uppercase; font-size: 0.85rem; }
-.player-table tr:hover { background-color: #0f172a; }
-
-.badge {
-  background-color: #3b82f6;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-/* Styling untuk Kartu Pertandingan */
-.match-list {
+/* SIDEBAR KIRI */
+.main-sidebar {
+  width: 250px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--line-delicate);
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-top: 15px;
+  padding: 20px 0;
+  z-index: 100;
 }
 
-.match-card {
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px 30px;
+  border-bottom: 1px solid var(--line-delicate);
+  margin-bottom: 20px;
+}
+
+.brand-text {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent-gold);
+  letter-spacing: -0.5px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 15px;
+}
+
+.menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background: transparent;
+  color: var(--ink-medium);
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.menu-btn:hover { background: var(--bg-input); color: var(--ink-dark); }
+.menu-btn.active { background: var(--row-gold-bg); color: var(--accent-gold); border: 1px solid rgba(229,194,106,0.2); }
+
+/* AREA KONTEN KANAN */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.top-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #0f172a;
-  padding: 15px 25px;
-  border-radius: 10px;
-  border: 1px solid #334155;
+  padding: 20px 30px;
+  background: rgba(7, 17, 12, 0.9);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--line-delicate);
 }
 
-.team-name {
-  flex: 1;
-  font-size: 1.1rem;
-  font-weight: bold;
-  text-align: center;
-}
+.header-title-box h2 { font-size: 20px; font-weight: 800; }
 
-.score-display {
-  flex: 0.5;
-  text-align: center;
-}
-
-.vs-badge {
-  background-color: #334155;
-  padding: 5px 10px;
-  border-radius: 5px;
+.league-selector-box select {
+  padding: 8px 15px;
+  border-radius: 100px;
+  background: var(--bg-input);
+  color: var(--accent-gold);
+  border: 1px solid var(--line-delicate);
   font-size: 0.9rem;
-  color: #94a3b8;
-}
-
-.score-numbers {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: #00f0ff;
-  background-color: #000;
-  padding: 5px 15px;
-  border-radius: 8px;
-}
-
-.match-action {
-  flex: 1;
-  text-align: right;
-}
-
-.btn-simulate {
-  background: linear-gradient(45deg, #00f0ff, #00ff87);
-  color: #000;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s;
+  outline: none;
+  max-width: 100%;
 }
 
-.btn-simulate:hover {
-  transform: scale(1.05);
+.main-wrapper { padding: 30px; }
+
+/* =========================================
+   GRID DASHBOARD (KLASEMEN KIRI, JADWAL KANAN)
+========================================= */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* KLASEMEN 2 BAGIAN, JADWAL 1 BAGIAN */
+  gap: 24px;
+  align-items: start;
 }
 
-.badge-finished {
-  background-color: #475569;
-  color: white;
-  padding: 5px 15px;
+/* Urutan kolom secara eksplisit — dipakai media query mobile di bawah untuk
+   membalik urutan (jadwal duluan, klasemen di bawahnya) tanpa mengubah markup. */
+.main-col { order: 1; min-width: 0; }
+.side-col { order: 2; min-width: 0; }
+
+/* KARTU KOMPONEN */
+.card {
+  background: var(--bg-card);
   border-radius: 20px;
-  font-weight: bold;
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+  border: 1px solid var(--line-delicate);
+}
+.card-h { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line-delicate); margin-bottom: 10px; gap: 10px; flex-wrap: wrap; }
+.card-h .g-name { font-weight: 800; font-size: 16px; color: var(--ink-dark); }
+
+/* TABEL
+   table-layout: fixed dihapus sengaja — tabel klasemen punya 10 kolom dengan lebar
+   konten sangat bervariasi (nama klub vs angka tunggal), auto-layout lebih pas.
+   Scroll horizontal (dari .table-responsive) yang menangani kasus layar sempit. */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { color: var(--ink-light); padding: 12px 10px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--line-delicate); text-align: left; white-space: nowrap; }
+td { padding: 12px 10px; border-bottom: 1px solid var(--bg-soft); white-space: nowrap; }
+.top-tier td { background: var(--row-gold-bg); }
+.club-name-col { font-weight: 700; white-space: nowrap; }
+.pts { font-weight: 800; text-align: center; color: var(--accent-gold); }
+.badge { background: var(--bg-input); padding: 4px 8px; border-radius: 6px; font-size: 10px; border: 1px solid var(--line-delicate); color: var(--ink-medium); }
+
+/* SIDEBAR MATCHES (JADWAL KOMPAK) */
+.sidebar-header { padding: 12px 15px; }
+.btn-generate { background: linear-gradient(180deg, #16291D, #0E1C14); color: var(--accent-gold); border: 1px solid #24382B; padding: 6px 12px; border-radius: 100px; cursor: pointer; font-weight: bold; font-size: 11px; white-space: nowrap; }
+.btn-generate:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+.mini-nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: var(--bg-soft); margin-bottom: 10px;}
+.pekan-title-mini { font-size: 13px; color: var(--accent-gold); margin: 0; font-weight: 800; }
+.pekan-sub { color: var(--ink-medium); font-size: 10px; }
+.btn-nav-mini { background: var(--bg-card); color: var(--ink-dark); border: 1px solid var(--line-delicate); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+.btn-nav-mini.dim { opacity: 0.3; cursor: not-allowed; }
+
+.match-card-sidebar {
+  background: var(--bg-soft);
+  border-radius: 10px;
+  border: 1px solid var(--line-delicate);
+  margin-bottom: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* min-width:0 pada home/away wajib supaya flex:1 benar-benar bisa menyusut dan
+   nama klub panjang di HP kecil membungkus/terpotong dengan rapi, bukan mendorong
+   layout melebar ke luar kartu (overflow horizontal yang tidak terlihat). */
+.match-teams-sidebar { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
+.home-team { flex: 1; min-width: 0; text-align: right; overflow-wrap: break-word; }
+.away-team { flex: 1; min-width: 0; text-align: left; overflow-wrap: break-word; }
+.vs-mini { font-size: 10px; color: var(--ink-light); margin: 0 8px; flex-shrink: 0; }
+.score-mini { font-size: 13px; color: var(--accent-gold); font-family: monospace; margin: 0 8px; flex-shrink: 0; }
+
+.btn-simulate-sidebar { background: var(--bg-card); border: 1px solid var(--accent-success); color: var(--accent-success); padding: 5px; border-radius: 6px; font-size: 10px; font-weight: bold; cursor: pointer; text-align: center; }
+.btn-simulate-sidebar:hover { background: var(--accent-success); color: #000; }
+.badge-finished-sidebar { text-align: center; color: var(--ink-medium); font-size: 10px; font-weight: bold; }
+
+/* =========================================
+   BARIS KLASEMEN LIVE + PANAH PERINGKAT
+========================================= */
+.row-live-active {
+  background-color: rgba(52, 211, 153, 0.12);
+  box-shadow: inset 3px 0 0 0 #34D399;
+}
+
+.live-dot {
+  display: inline-block;
+  margin-left: 6px;
+  color: #34D399;
+  font-size: 8px;
+  animation: liveDotPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes liveDotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.pts-live-badge {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #07110C;
+  background-color: #34D399;
+  padding: 1px 6px;
+  border-radius: 999px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.rank-arrow {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.rank-up { color: #34D399; }
+.rank-down { color: #F87171; }
+.rank-same { color: #9CB0A4; font-size: 8px; }
+
+/* =========================================
+   HALAMAN STATISTIK (Top Scorer / Assist / Kartu)
+========================================= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================================
+   MEDIA QUERY: TABLET (≤900px) — bottom nav muncul
+========================================= */
+@media (max-width: 900px) {
+  .app-layout { flex-direction: column; }
+
+  .main-sidebar {
+    order: 3;
+    width: 100%;
+    height: 64px;
+    flex-direction: row;
+    padding: 0;
+    border-right: none;
+    border-top: 1px solid var(--line-delicate);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+  .sidebar-brand { display: none; }
+
+  /* 3 menu (Dashboard/Pemain/Statistik) sekarang dibagi rata dengan flex:1,
+     bukan width:45% tetap — sebelumnya width:45% hanya pas untuk 2 tombol dan
+     akan overflow (45%*3 = 135%) begitu menu ketiga (Statistik) ditambahkan. */
+  .sidebar-menu {
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 4px;
+    gap: 4px;
+  }
+  .menu-btn {
+    flex: 1;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px 2px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 0;
+  }
+  .menu-text { font-size: 10.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Ruang konten menyisakan tempat untuk bottom nav (64px), + safe-area untuk
+     HP dengan gesture bar (notch bawah di iPhone dsb). */
+  .content-area {
+    height: calc(100vh - 64px - env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .main-sidebar { height: calc(64px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); }
+
+  .top-header { flex-direction: column; align-items: stretch; gap: 10px; padding: 14px 16px; }
+  .header-title-box h2 { font-size: 17px; text-align: center; }
+  .league-selector-box { display: flex; justify-content: center; }
+  .league-selector-box select { width: 100%; text-align: center; }
+
+  .main-wrapper { padding: 14px; }
+
+  /* Grid diputus jadi 1 kolom; .side-col (Jadwal) tampil LEBIH DULU secara visual
+     karena di mobile orang biasanya mau lihat/pilih pertandingan dulu sebelum
+     scroll ke klasemen panjang — order diatur lewat CSS, markup tidak diubah. */
+  .dashboard-grid { grid-template-columns: 1fr; gap: 16px; }
+  .side-col { order: 1; }
+  .main-col { order: 2; }
+
+  .stats-grid { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* =========================================
+   MEDIA QUERY: HP KECIL (≤480px)
+========================================= */
+@media (max-width: 480px) {
+  .main-wrapper { padding: 10px; }
+  .dashboard-grid { gap: 12px; }
+  .stats-grid { gap: 10px; }
+
+  .card-h { padding: 12px 14px; margin-bottom: 6px; }
+  .card-h .g-name { font-size: 14px; }
+
+  /* Tabel mengecil sedikit lagi supaya kolom "Main/M/S/K/GM/GK/Poin" muat tanpa
+     scroll horizontal untuk liga kecil; liga dengan nama klub panjang tetap
+     bisa scroll lewat .table-responsive, ini hanya mengurangi kebutuhan scroll-nya. */
+  table { font-size: 11.5px; }
+  th, td { padding: 9px 6px; }
+  .badge { font-size: 9px; padding: 3px 6px; }
+
+  .card { border-radius: 14px; }
+
+  .match-card-sidebar { padding: 8px; }
+  .match-teams-sidebar { font-size: 11px; }
+
+  .menu-text { font-size: 9.5px; }
 }
